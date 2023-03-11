@@ -16,7 +16,7 @@ setup(
                             "trim = vidmake.app:trim_main",
                             "highlights = vidmake.vid_high_cont:main",
                             "continous = vidmake.vid_high_cont:con_main",
-
+                            "play=vidmake.vid_high_cont:play_music",
 
         ]
     },

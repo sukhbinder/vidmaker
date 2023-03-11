@@ -16,7 +16,9 @@ import warnings
 
 warnings.simplefilter("ignore", category=UserWarning)
 
-
+def ulimitincrease():
+    iret=os.system("ulimit -Sn 10000")
+    return iret
 
 def get_non_linear_subclips_VDURS(mov, vdurs, dur, ntime):
     vtype = "NL"
@@ -146,6 +148,8 @@ def main():
     args = parser.parse_args()
     audfile = args.audfile
     beats_track = args.beats
+    iret = ulimitincrease()
+    print(iret)
     if audfile is None and beats_track is None:
         audfile,beats_track = get_beats_tracks(args.audio)
 
@@ -175,6 +179,7 @@ def main():
         if args.debug:
             tempdir=cwd
         os.chdir(tempdir)
+        print("The working ", tempdir)
         outfiles = trim_and_get_outfiles(subclips)
 
         # vc = [mpy.VideoFileClip(f) for f in outfiles]
@@ -190,6 +195,8 @@ def main():
             vc = get_subclips(outfiles)
             print(len(vc))
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname,fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
+        for v in vc:
+            v.close()
         del vc
         print(tempdir)
     os.chdir(cwd)
@@ -211,6 +218,9 @@ def create_parser2():
     parser.add_argument("-foout", "--fadeout",  type=float, help="Video fadeout (default: %(default)s)", default=1.0)
     parser.add_argument("-af", "--afadeout",  type=float, help="Audio FPS (default: %(default)s)", default=2.0)
     parser.add_argument("-d", "--debug", help="Debug this (default: %(default)s)", action="store_true")
+
+    parser.add_argument("-aaf", "--audfile",  type=str, help="mp3 Audio file (default: %(default)s)", default=None)
+    parser.add_argument("-bt", "--beats",  type=str, help="Beats Track (default: %(default)s)", default=None)
 
     return parser
 
@@ -251,7 +261,10 @@ def con_main():
     parser = create_parser2()
     args = parser.parse_args()
 
-    audfile,beats_track = get_beats_tracks(args.audio)
+    audfile = args.audfile
+    beats_track = args.beats
+    if audfile is None and beats_track is None:
+        audfile,beats_track = get_beats_tracks(args.audio)
     # ind = app._CHOICES.index(args.audio)
 
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
@@ -294,7 +307,23 @@ def con_main():
             outfullname = os.path.join(vdir, "continous_{0}_{1}_{2}_highlights_t_{3}.mp4".format(prefix,args.audio, "linear", len(mov)))
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname, fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
             beg = istart
+            # Calling close so its close
+            for v in vc:
+                v.close()
             del vc
     os.chdir(cwd)
 
 
+def play_music():
+    parser = argparse.ArgumentParser(description="Play music")
+    parser.add_argument("audio",  type=str, help="Audio to use (default: %(default)s)",
+                        choices=app._CHOICES, default="COAST")
+    parser.add_argument("-t", "--time",  type=int, help="Playback time in sec. (default: %(default)s)", default=30)
+    args = parser.parse_args()
+
+    audfile,beats_track = get_beats_tracks(args.audio)
+
+    CMDLINE = "afplay '{0}' -t {1}"
+
+    cmline = CMDLINE.format(audfile, args.time)
+    iret= os.system(cmline)
