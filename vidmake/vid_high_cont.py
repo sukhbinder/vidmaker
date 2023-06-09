@@ -11,6 +11,7 @@ import vidmake.MakeDayVideoWithFFMPEG as flib
 
 import argparse
 
+from random import choices
 
 import warnings
 
@@ -225,7 +226,7 @@ def create_parser2():
     return parser
 
 
-def trim_and_get_outfiles_for_coninous(subclips):
+def trim_and_get_outfiles_for_coninous(subclips, slow=0.7):
     inum=1
     outfiles=[]
     for item, val in subclips.items():
@@ -242,8 +243,11 @@ def trim_and_get_outfiles_for_coninous(subclips):
             dur=et-st
             if dur > 5.0:
                 outfile = "{}_output.mp4".format(inum)
-            else:    
-                outfile = "{}_output_s.mp4".format(inum)
+            else:
+                if choices([0,1], weights=[1-slow, slow]):
+                    outfile = "{}_output_s.mp4".format(inum)
+                else:
+                   outfile = "{}_output.mp4".format(inum) 
             app.trim_by_ffmpeg(item, st, et,outfile, dur)
             if os.path.exists(outfile):
                 outfiles.append(outfile)
