@@ -226,7 +226,7 @@ def generate_video_hl(vc, new_audioclip, outfile, fps=30, fadeout=1, afadeout=2,
 # In[6]:
 
 
-def get_events(vdurs, intervals):
+def get_events(vdurs, intervals, howmany=15):
     ndur = len(intervals)
     tt = 0
     out = defaultdict(list)
@@ -239,7 +239,7 @@ def get_events(vdurs, intervals):
             count += 1
             if tt+ii+1 > vv:# add one second so there is a gap
                 break
-            if count > 5:
+            if count > howmany:
                 break
             tt += ii
         out[iv] = intervals[istart:ip+istart]
