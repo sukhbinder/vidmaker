@@ -115,7 +115,7 @@ def create_parser_concat():
     parser = argparse.ArgumentParser( description="Concat Videos using FFMPEG")
     
     parser.add_argument("-f", "--folder", type=str, help="Folder Path (default: %(default)s)", default=r"/Users/sukhbindersingh/Desktop/200video/front")
-    parser.add_argument("-p", "--prefix",  type=str, help="Filename Starts with (default: %(default)s)", default="2022")
+    parser.add_argument("-p", "--prefix",  type=str, help="Filename Starts with (default: %(default)s)", default="2023")
     parser.add_argument("-op", "--output-prefix",  type=str,  help="Output Filename prefix (default: %(default)s)", default="DIV_")
     parser.add_argument("-b", "--break-at",  type=int,  help="File Break in Seconds (default: %(default)s)", default=65)
     
@@ -135,7 +135,7 @@ def create_parser_section():
     
     parser.add_argument("day", type=str, help="Day in YYYYMMDD")
     parser.add_argument("-f", "--folder",  type=str, help="Folder location (default: %(default)s)", default=r"/Users/sukhbindersingh/Desktop/200video/front")
-    parser.add_argument("-p", "--prefix",  type=str, help="Filename Starts with (default: %(default)s)", default="2022")
+    parser.add_argument("-p", "--prefix",  type=str, help="Filename Starts with (default: %(default)s)", default="2023")
     parser.add_argument("-op", "--output-prefix",  type=str,  help="Output Filename prefix (default: %(default)s)", default="travel_video")
     parser.add_argument("-b", "--break-at",  type=int,  help="File Break in Seconds (default: %(default)s)", default=65)
     

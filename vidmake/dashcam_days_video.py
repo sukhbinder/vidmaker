@@ -29,7 +29,7 @@ def makedayvideo(files, day):
         del vc, clip
 
 
-def all_videos_by_days(folder=r"/Users/sukhbindersingh/Desktop/200video/front", year="2022"):
+def all_videos_by_days(folder=r"/Users/sukhbindersingh/Desktop/200video/front", year="2023"):
     os.chdir(folder)
     files = os.listdir(folder)
     print(len(files))
@@ -67,7 +67,7 @@ def get_travel_section(dayf, filename="travel_vid.mp4", beg_time=5, end_time=6):
     _=[a.close() for a in vc]
 
 
-def get_travel_section_by_time(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2022", stop=65,
+def get_travel_section_by_time(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2023", stop=65,
                                 fileprefix="travel_video", beg_time=5, end_time=6):
     """
     day given as YYYYMMDD

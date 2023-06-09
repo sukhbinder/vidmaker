@@ -13,7 +13,7 @@ from dateutil.parser import parse
 # In[35]:
 
 
-def get_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2022", stop=65):
+def get_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2023", stop=65):
     os.chdir(folder)
     files = os.listdir(folder)
     days= list(set(f[:8] for f in files if f.startswith(startswith)))
@@ -31,7 +31,7 @@ def get_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", sta
 # In[42]:
 
 
-def all_videos_by_days(folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2022", fileprefix="DTV_", break_at=65):
+def all_videos_by_days(folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2023", fileprefix="DTV_", break_at=65):
     os.chdir(folder)
     files = os.listdir(folder)
     print(len(files))
@@ -48,7 +48,7 @@ def all_videos_by_days(folder=r"/Users/sukhbindersingh/Desktop/200video/front", 
 # In[43]:
 
 
-def get_travel_video_by_day_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2022", stop=65,
+def get_travel_video_by_day_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/200video/front", startswith="2023", stop=65,
                                 fileprefix="daytravel_video"):
     dayf, breaks = get_breaks(day,folder, startswith,stop)
     beg =0
