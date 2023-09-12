@@ -40,12 +40,12 @@ def get_files(fdir, starts_with, sort_by_date=False):
 # In[4]:
 
 
-def beats_clip(audfile):
+def beats_clip(audfile, offset=0.0):
     song_name = os.path.basename(audfile)
     print(song_name)
 
     snd = mpy.AudioFileClip(audfile)
-    new_audioclip = mpy.CompositeAudioClip([snd])
+    new_audioclip = mpy.CompositeAudioClip([snd.subclip(t_start=offset)])
     return song_name, new_audioclip
 
 
@@ -70,9 +70,9 @@ def beat_times(beats_track, threshold=0.2):
     return new_times, dur
 
 
-def get_audioclip_n_beats(audfile, beats_track, threshold=0.2):
+def get_audioclip_n_beats(audfile, beats_track, threshold=0.2, startat=0.0):
     new_time, dur = beat_times(beats_track, threshold)
-    song_name, new_audioclip = beats_clip(audfile)
+    song_name, new_audioclip = beats_clip(audfile,offset=startat)
     return song_name, new_audioclip, new_time, dur
 
 
@@ -187,6 +187,7 @@ def get_subclips_2(subclips):
         if speed == 1:
             clip = clip.speedx(factor=0.5)
         vc.append(clip)
+        del vid
     return vc
 
 def generate_video_hl(vc, new_audioclip, outfile, fps=30, fadeout=1, afadeout=2, clip=None):
@@ -277,11 +278,11 @@ def start_time(vv, ii):
     return ret_
 
 
-def get_subclips_linear(mov, vids, intervals, vdurs=None):
+def get_subclips_linear(mov, vids, intervals, vdurs=None, howmany=15):
     if vdurs is None:
         vdurs = np.array([vids[file].duration for file in mov])
     
-    out = get_events(vdurs, intervals)
+    out = get_events(vdurs, intervals, howmany=howmany)
     subclips = defaultdict(list)
     for k, i in out.items():
         subclips[mov[k]] = start_time(vdurs[k], i)

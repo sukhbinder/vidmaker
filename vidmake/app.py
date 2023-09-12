@@ -5,6 +5,7 @@ import argparse
 from concurrent.futures import ProcessPoolExecutor
 import subprocess
 import os
+import moviepy.editor as mpy
 
 import json
 
@@ -215,14 +216,14 @@ def trim_by_ffmpeg(inputfile, starttime, endtime, outputfile,duration =None):
             endtime = get_seconds(endtime)
     
     if duration is not None:
-        cmdline = "ffmpeg -y -ss {starttime:0.2f} -i {inputfile} -t {duration:0.2f} -c copy {outputfile}".format(
+        cmdline = "ffmpeg -y -ss {starttime:0.4f} -i {inputfile} -t {duration:0.4f} -c copy {outputfile}".format(
             starttime=float(starttime),
             inputfile=inputfile,
             duration=float(duration),
             outputfile=outputfile
         )
     else:
-        cmdline = "ffmpeg -y -ss {starttime:0.2f} -i {inputfile} -to {endtime:0.2f} -map 0 -vcodec copy -acodec copy  {outputfile}".format(
+        cmdline = "ffmpeg -y -ss {starttime:0.4f} -i {inputfile} -to {endtime:0.4f} -map 0 -vcodec copy -acodec copy  {outputfile}".format(
             starttime=float(starttime),
             inputfile=inputfile,
             endtime=float(endtime),
@@ -243,4 +244,44 @@ def get_length(filename):
 
 
 
+def create_concat_movie(fname):
+    #fname=r"/Users/sukhbindersingh/Desktop/youtube/aadiyogi_/orderfiles.txt"
+    fpath = os.path.dirname(fname)
+    
+    with open(fname, "r") as fin:
+        files = fin.readlines()
+    # get first name
+    iname = files[0].lower().replace(".mov","").replace(".mp4","")
 
+    files =[os.path.join(fpath, file.strip()) for file in files]
+    clips = [mpy.VideoFileClip(file) for file in files]
+    
+    
+    clip = mpy.concatenate_videoclips(clips)
+
+    # Write out only audio file also
+    audio = clip.audio
+    aoutput_path = os.path.join(fpath, "total_{0}.mp3".format(iname))
+    audio=audio.set_fps(44100)
+    audio.write_audiofile(aoutput_path)
+
+    # write out video
+    output_path = os.path.join(fpath, "total_vid_{0}.mp4".format(iname))
+    clip.write_videofile(output_path, temp_audiofile="out.m4a", audio=True,  audio_codec="aac", codec='libx264', fps=60)
+    
+    
+    
+    _=[clip.close() for clip in clips]
+
+    print("{} mp4 created".format(output_path))
+
+def create_parser_moviepy_concat():
+    parser = argparse.ArgumentParser( description="Concat files using moviepy")
+    parser.add_argument("inputfile", type=str, help="orderfiles that has list of files to concat")
+    return parser
+
+def main_moviepy_concat():
+    parser = create_parser_moviepy_concat()
+    args = parser.parse_args()
+    fname = os.path.abspath(args.inputfile)
+    create_concat_movie(fname)
