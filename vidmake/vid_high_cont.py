@@ -232,6 +232,8 @@ def create_parser2():
 
     parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
 
+    parser.add_argument("-f", "--ffmpeg", help="Create concatenated Video (default: %(default)s)", action="store_true")
+
     return parser
 
 
@@ -303,8 +305,10 @@ def con_main():
             tempdir =cwd
         os.chdir(tempdir)
         outfiles = trim_and_get_outfiles_for_coninous(subclips)
-        fname= os.path.join(vdir, "CONCATENATED_using_ffmpeg.mp4") # backup mp4
-        iret=flib.make_video(outfiles, fname)
+
+        if args.ffmpeg:
+            fname= os.path.join(vdir, "CONCATENATED_using_ffmpeg.mp4") # backup mp4
+            iret=flib.make_video(outfiles, fname)
         # clip = mpy.VideoFileClip(fname)
         # vc = get_subclips(outfiles)
         
