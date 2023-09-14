@@ -113,13 +113,15 @@ def create_parser():
 
     parser.add_argument("-fps", "--fps",  type=int, help="Video FPS (default: %(default)s)", default=60)
     parser.add_argument("-foout", "--fadeout",  type=float, help="Video fadeout (default: %(default)s)", default=1.0)
-    parser.add_argument("-af", "--afadeout",  type=float, help="Audio FPS (default: %(default)s)", default=2.0)
+    parser.add_argument("-af", "--afadeout",  type=float, help="Audio fadeout (default: %(default)s)", default=2.0)
     parser.add_argument("-d", "--debug", help="Debug this (default: %(default)s)", action="store_true")
     parser.add_argument("-u", "--use-ffmpeg", help="Use FFMPEG to write (default: %(default)s)", action="store_true")
 
 
     parser.add_argument("-aaf", "--audfile",  type=str, help="mp3 Audio file (default: %(default)s)", default=None)
     parser.add_argument("-bt", "--beats",  type=str, help="Beats Track (default: %(default)s)", default=None)
+
+    parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
 
     return parser
 
@@ -159,7 +161,9 @@ def main():
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
     # beats_track = os.path.join(app._ASSETS, app._BEATS_TRACK[ind])
 
-    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,threshold=args.threshold)
+    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,
+                                                                         threshold=args.threshold,
+                                                                         startat=args.startat)
 
     mov = vlib.read_orderfile(args.filename)
     vdir = os.path.dirname(os.path.abspath(args.filename))
@@ -223,6 +227,8 @@ def create_parser2():
     parser.add_argument("-aaf", "--audfile",  type=str, help="mp3 Audio file (default: %(default)s)", default=None)
     parser.add_argument("-bt", "--beats",  type=str, help="Beats Track (default: %(default)s)", default=None)
 
+    parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
+    
     return parser
 
 
@@ -274,7 +280,9 @@ def con_main():
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
     # beats_track = os.path.join(app._ASSETS, app._BEATS_TRACK[ind])
 
-    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,threshold=args.threshold)
+    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,
+                                                                         threshold=args.threshold,
+                                                                         startat=args.startat)
 
     mov = vlib.read_orderfile(args.filename)
     vdir = os.path.dirname(os.path.abspath(args.filename))
