@@ -234,6 +234,8 @@ def create_parser2():
 
     parser.add_argument("-f", "--ffmpeg", help="Create concatenated Video (default: %(default)s)", action="store_true")
 
+    parser.add_argument("-hm", "--howmany",  type=int, help="How many clips to take (default: %(default)s)", default=15)
+
     return parser
 
 
@@ -296,7 +298,7 @@ def con_main():
     # vdursd = {f: app.get_length(f) for f in mov}
     vdursd = np.array([app.get_length(f) for f in mov])
 
-    subclips = vlib.get_subclips_linear(mov, [], dur, vdurs=vdursd)
+    subclips = vlib.get_subclips_linear(mov, [], dur, vdurs=vdursd, howmany=args.howmany)
     vlib.write_subclips_json(os.path.join(vdir, "Continuous_{0}_subclips_time_{1}.json".format("Linear", len(mov))), subclips)
     
     cwd = os.getcwd()
