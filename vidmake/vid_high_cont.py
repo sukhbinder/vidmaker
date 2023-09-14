@@ -8,6 +8,7 @@ import numpy as np
 import vidmake.app as app
 import vidmake.video_intro_lib as vlib
 import vidmake.MakeDayVideoWithFFMPEG as flib
+import librosa
 
 import argparse
 
@@ -155,6 +156,8 @@ def main():
     print(iret)
     if audfile is None and beats_track is None:
         audfile,beats_track = get_beats_tracks(args.audio)
+    else:
+        beats_track = get_beatsmap_from_mp3(args.audfile)
 
     # ind = app._CHOICES.index(args.audio)
 
@@ -228,7 +231,7 @@ def create_parser2():
     parser.add_argument("-bt", "--beats",  type=str, help="Beats Track (default: %(default)s)", default=None)
 
     parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
-    
+
     return parser
 
 
@@ -275,6 +278,8 @@ def con_main():
     beats_track = args.beats
     if audfile is None and beats_track is None:
         audfile,beats_track = get_beats_tracks(args.audio)
+    else:
+        beats_track = get_beatsmap_from_mp3(args.audfile)
     # ind = app._CHOICES.index(args.audio)
 
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
@@ -339,3 +344,14 @@ def play_music():
 
     cmline = CMDLINE.format(audfile, args.time)
     iret= os.system(cmline)
+
+def get_beatsmap_from_mp3(file_path):
+    x, sr = librosa.load(file_path)
+    onset_frames = librosa.onset.onset_detect(x, sr=sr, wait=5, pre_avg=1, post_avg=1, pre_max=1, post_max=1)
+    onset_times = librosa.frames_to_time(onset_frames)
+    # remove extension, .mp3, .wav etc.
+    file_name_no_extension, _ = os.path.splitext(file_path)
+    output_name = file_name_no_extension + '.beatmap.txt'
+    with open(output_name, 'wt') as f:
+        f.write('\n'.join(['%.4f' % onset_time for onset_time in onset_times]))
+    return output_name
