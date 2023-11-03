@@ -129,6 +129,7 @@ def create_parser():
 
 def get_subclips(outfiles):
     vc = []
+    durations=[]
     for file in outfiles:
         vid = mpy.VideoFileClip(file)
         # print(vid)
@@ -141,9 +142,11 @@ def get_subclips(outfiles):
         try:
             dd = vid.duration
             vc.append(vid)
+            durations.append(dd)
         except Exception as ex:
             print(ex)
             continue
+    print("Time in seconds for the clip is {0:0.2f}".format(sum(durations)))
     return vc
 
 def main():
@@ -201,7 +204,6 @@ def main():
         else:
             print(len(outfiles))
             vc = get_subclips(outfiles)
-            print(len(vc))
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname,fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
         for v in vc:
             v.close()
