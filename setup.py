@@ -18,6 +18,7 @@ setup(
                             "continous = vidmake.vid_high_cont:con_main",
                             "play=vidmake.vid_high_cont:play_music",
                             "mconcat = vidmake.app:main_moviepy_concat",
+                            "shorts = vidmake.shorts_experiment:main",
 
         ]
     },
