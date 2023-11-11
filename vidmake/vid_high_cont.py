@@ -159,8 +159,10 @@ def main():
     print(iret)
     if audfile is None and beats_track is None:
         audfile,beats_track = get_beats_tracks(args.audio)
+        audioname = args.audio
     else:
         beats_track = get_beatsmap_from_mp3(args.audfile)
+        audioname = args.audfile[:10]
 
     # ind = app._CHOICES.index(args.audio)
 
@@ -182,7 +184,7 @@ def main():
         subclips = get_non_linear_subclips_VDURS(mov, vdursd, dur, clip_time)
     else:
         subclips = get_linear_subclips(mov, vdursd, dur, clip_time)
-    vlib.write_subclips_json(os.path.join(vdir, "{0}_subclips_time_{1}_{2}.json".format(args.vtype, clip_time,args.audio )), subclips)
+    vlib.write_subclips_json(os.path.join(vdir, "{0}_subclips_time_{1}_{2}.json".format(args.vtype, clip_time,audioname )), subclips)
 
 
     cwd = os.getcwd()
@@ -195,7 +197,7 @@ def main():
 
         # vc = [mpy.VideoFileClip(f) for f in outfiles]
         
-        outfullname = os.path.join(vdir, "{0}_{1}_{2}_highlights_t_{3}.mp4".format(args.prefix,args.audio, args.vtype, clip_time))
+        outfullname = os.path.join(vdir, "{0}_{1}_{2}_highlights_t_{3}.mp4".format(args.prefix,audioname, args.vtype, clip_time))
         if args.use_ffmpeg:
             fname="combined_withffmpeg.mp4"
             flib.make_video(outfiles, fname)
@@ -284,8 +286,10 @@ def con_main():
     beats_track = args.beats
     if audfile is None and beats_track is None:
         audfile,beats_track = get_beats_tracks(args.audio)
+        audioname = args.audio
     else:
-        beats_track = get_beatsmap_from_mp3(args.audfile)
+        beats_track = get_beatsmap_from_mp3(audfile)
+        audioname = audfile[:10]
     # ind = app._CHOICES.index(args.audio)
 
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
@@ -329,7 +333,7 @@ def con_main():
         for istart in alist[1:]:
             prefix = "{0}_{1}".format(args.prefix, beg)
             vc = get_subclips(outfiles[beg:istart])
-            outfullname = os.path.join(vdir, "continous_{0}_{1}_{2}_highlights_t_{3}.mp4".format(prefix,args.audio, "linear", len(mov)))
+            outfullname = os.path.join(vdir, "continous_{0}_{1}_{2}_highlights_t_{3}.mp4".format(prefix, audioname, "linear", len(mov)))
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname, fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
             beg = istart
             # Calling close so its close
