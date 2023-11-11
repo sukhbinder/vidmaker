@@ -162,7 +162,8 @@ def main():
         audioname = args.audio
     else:
         beats_track = get_beatsmap_from_mp3(args.audfile)
-        audioname = args.audfile[:10]
+        audioname = os.path.basename(audfile)[:10]
+        audioname = audioname.replace(" ", "_")
 
     # ind = app._CHOICES.index(args.audio)
 
@@ -289,7 +290,8 @@ def con_main():
         audioname = args.audio
     else:
         beats_track = get_beatsmap_from_mp3(audfile)
-        audioname = audfile[:10]
+        audioname = os.path.basename(audfile)[:10]
+        audioname = audioname.replace(" ", "_")
     # ind = app._CHOICES.index(args.audio)
 
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
