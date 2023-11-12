@@ -269,7 +269,11 @@ def create_concat_movie(fname, onlyaudio=False):
 
     # write out video
     if not onlyaudio:
-        output_path = os.path.join(fpath, "total_vid_{0}.mp4".format(iname))
+        for i in range(10):
+            output_path = os.path.join(fpath, "total_vid_{0}_{1}.mp4".format(iname, i))
+            if not os.path.exists(output_path):
+                break
+        
         clip.write_videofile(output_path, temp_audiofile="out.m4a", audio=True,  audio_codec="aac", codec='libx264', fps=60)
         print("{} mp4 created".format(output_path))
     
