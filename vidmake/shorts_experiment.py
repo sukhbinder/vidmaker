@@ -17,12 +17,13 @@ _ASSETS = os.path.join(_HERE, "..", "assets")
 notification_fname = os.path.join(_ASSETS, "notification.mp3")
 subcribe_fname = os.path.join(_ASSETS, "subscribe.mp3")
 
-def create_shorts_from_vid(fname, startat=0.0):
+def create_shorts_from_vid(fname, startat=0.0, crop_ratio=1):
     clip = mpy.VideoFileClip(fname)
     clip = clip.subclip(t_start=startat)
     w, h = clip.size
 
-    crop_width = h * 9/16
+    # crop_ratio = 1 #  4/5 # 9/16
+    crop_width = h * crop_ratio
     x1, x2 = (w-crop_width)//2, (w+crop_width)//2
     cclip = clip.crop(x1=x1, y1=0, x2=x2, y2=h)
 
@@ -114,6 +115,7 @@ def main():
     parser.add_argument("-i", "--input",  type=str,nargs="*",action="append", help="Text inputs (default: %(default)s)", default=[])
     parser.add_argument("-d", "--time",  type=int, help="Duration of shorts in secs (default: %(default)s)", default=MAX_CLIP_TIME)
     parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
+    parser.add_argument("-r", "--ratio",  type=float, help="Size Ratio: ex 9/16, 4/5 or (default: %(default)s)", default=1.0)
     
 
     args = parser.parse_args()
@@ -146,7 +148,7 @@ def main():
         latest = max(files, key = os.path.getctime)
         fname = latest
     
-    cclip = create_shorts_from_vid(fname, startat=args.startat)
+    cclip = create_shorts_from_vid(fname, startat=args.startat, crop_ratio=args.ratio)
     # if Duration is given as negative use the entire Duration of the clip
     if args.time < 0:
         clip_time = cclip.duration
