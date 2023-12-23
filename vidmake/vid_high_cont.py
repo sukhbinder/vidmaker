@@ -335,7 +335,11 @@ def con_main():
         for istart in alist[1:]:
             prefix = "{0}_{1}".format(args.prefix, beg)
             vc = get_subclips(outfiles[beg:istart])
-            outfullname = os.path.join(vdir, "continous_{0}_{1}_{2}_highlights_t_{3}.mp4".format(prefix, audioname, "linear", len(mov)))
+            ifname = "continous_{0}_{1}_{2}_highlights_t_{3}_hm_{4}_st_{5}_thes_{6}.mp4".format(prefix, audioname, "linear", 
+                                                                                       len(mov), args.howmany,
+                                                                                       args.startat,
+                                                                                       args.threshold)
+            outfullname = os.path.join(vdir, ifname)
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname, fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
             beg = istart
             # Calling close so its close
