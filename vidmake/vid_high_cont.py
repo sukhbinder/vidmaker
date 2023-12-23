@@ -241,6 +241,8 @@ def create_parser2():
 
     parser.add_argument("-hm", "--howmany",  type=int, help="How many clips to take (default: %(default)s)", default=15)
 
+    parser.add_argument("-nc", "--no-of-clips",  type=int, help="New file after this many (default: %(default)s)", default=240)
+
     return parser
 
 
@@ -326,7 +328,7 @@ def con_main():
         # see https://stackoverflow.com/questions/72503468/exception-has-occurred-oserror-moviepy-error-failed-to-read-the-first-frame-of
         nout= len(outfiles)
         print("Length of clips: {}".format(nout))
-        if nout >200:
+        if nout >args.no_of_clips:
             alist = list(range(0, nout, 200))
             alist.append(nout)
         else:
@@ -363,10 +365,15 @@ def play_music():
     cmline = CMDLINE.format(audfile, args.time)
     iret= os.system(cmline)
 
-def get_beatsmap_from_mp3(file_path):
+def get_beatsmap_from_mp3(file_path, beats=True):
     x, sr = librosa.load(file_path)
-    onset_frames = librosa.onset.onset_detect(x, sr=sr, wait=5, pre_avg=1, post_avg=1, pre_max=1, post_max=1)
-    onset_times = librosa.frames_to_time(onset_frames)
+    if beats:
+        tempo, b_f = librosa.beat.beat_track(x,sr=sr)
+        onset_times = librosa.frames_to_time(b_f)
+        print(f"tempo : {tempo}")
+    else:
+        onset_frames = librosa.onset.onset_detect(x, sr=sr, wait=5, pre_avg=1, post_avg=1, pre_max=1, post_max=1)
+        onset_times = librosa.frames_to_time(onset_frames)
     # remove extension, .mp3, .wav etc.
     file_name_no_extension, _ = os.path.splitext(file_path)
     output_name = file_name_no_extension + '.beatmap.txt'
