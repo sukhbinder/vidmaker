@@ -198,7 +198,7 @@ def main():
 
         # vc = [mpy.VideoFileClip(f) for f in outfiles]
         
-        outfullname = os.path.join(vdir, "{0}_{1}_{2}_highlights_t_{3}.mp4".format(args.prefix,audioname, args.vtype, clip_time))
+        outfullname = os.path.join(vdir, "{0}_{1}_{2}_highlights_t_{3}_{4}.mp4".format(args.prefix,audioname, args.vtype,args.threshold,clip_time))
         if args.use_ffmpeg:
             fname="combined_withffmpeg.mp4"
             flib.make_video(outfiles, fname)
