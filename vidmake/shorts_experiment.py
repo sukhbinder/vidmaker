@@ -56,7 +56,7 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
     ntext = len(textlist)
     interval = int(clip_time/ntext)
     for i, post in enumerate(textlist):
-        return_comment, nline = addcomment(post, size=30)
+        return_comment, nline = addcomment(post, size=50)
         color = random.choice(colors)
         fontsize=30
         if "@humhairahi" in return_comment:
@@ -132,6 +132,7 @@ def main():
 
     print(TEXTLIST)
 
+
     # print(fname)
     if not fname.endswith(".mp4"):
         choices = app._CHOICES
@@ -174,6 +175,12 @@ def main():
     dirname = os.path.dirname(fname)
     basename = os.path.basename(fname)
     outpath = os.path.join(dirname, "Shorts_{}".format(basename))
+    outpath_tx = os.path.join(dirname, "Shorts.txt")
+
+
+    if args.text_file is None:
+        with open(outpath_tx, "w") as fout:
+            fout.write("\n".join(TEXTLIST[:-1]))
 
     # make loopable
     clip = vfx.make_loopable(clip,1)
