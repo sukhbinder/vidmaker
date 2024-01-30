@@ -170,10 +170,7 @@ def main():
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
     # beats_track = os.path.join(app._ASSETS, app._BEATS_TRACK[ind])
 
-    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,
-                                                                         threshold=args.threshold,
-                                                                         startat=args.startat)
-
+    
     mov = vlib.read_orderfile(args.filename)
     vdir = os.path.dirname(os.path.abspath(args.filename))
     vdursd = {f: app.get_length(f) for f in mov}
@@ -181,6 +178,11 @@ def main():
     clip_time=args.clip_time
     if clip_time is None:
         clip_time = len(mov)+1
+
+    song_name, new_audioclip, new_time, dur = vlib.get_audioclip_n_beats(audfile, beats_track,
+                                                                         threshold=args.threshold,
+                                                                         startat=args.startat)
+
     if args.vtype == "NL":
         subclips = get_non_linear_subclips_VDURS(mov, vdursd, dur, clip_time)
     else:
@@ -365,7 +367,7 @@ def play_music():
     cmline = CMDLINE.format(audfile, args.time)
     iret= os.system(cmline)
 
-def get_beatsmap_from_mp3(file_path, beats=True):
+def get_beatsmap_from_mp3(file_path, beats=False):
     x, sr = librosa.load(file_path)
     if beats:
         tempo, b_f = librosa.beat.beat_track(x,sr=sr)
