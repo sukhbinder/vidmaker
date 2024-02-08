@@ -44,8 +44,8 @@ def zoom_in_out(t):
 
 def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, size=20):
 # def get_text_clips_n_notification(textlist, clip_time=60, height=1280, wid=720, size=20):
-    colors = [ 'Green', 'Blue', 'SkyBlue2', 'Purple',
-              'LimeGreen', 'HotPink4', 'Red', 'OrangeRed3', 'Brown']
+    colors = [ 'Green', 'NavyBlue', 'SkyBlue2', 'Purple',
+              'Black', 'HotPink4', 'Red', 'OrangeRed3', 'Brown']
     
     # colors =["red",'yellow', 'Green', 'Blue', "Orange", ]
 
@@ -59,12 +59,10 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
         return_comment, nline = addcomment(post, size=50)
         color = random.choice(colors)
         fontsize=30
-        if "@humhairahi" in return_comment:
-            fontsize=25
             # color="white"
         text_hight = 60 #max(200, nline*fontsize)
         txt = mpy.TextClip(return_comment, font="Keep-Calm-Medium",  # font='Courier',
-                           fontsize=fontsize, bg_color=color, size=(wid, text_hight),
+                           fontsize=fontsize, bg_color=color, size=(wid+5, text_hight+10),
                            method="caption",
                            stroke_width=2.0,
                            stroke_color="white",
@@ -80,7 +78,7 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
         txt = txt.crossfadein(0.5)
         txt = txt.crossfadeout(0.5)
         # animation
-        # txt = txt.resize(zoom_in_out)
+        txt = txt.resize(zoom_in_out)
         text_clips.append(txt)
         print(i, 0+(i*interval))
 
