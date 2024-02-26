@@ -44,8 +44,8 @@ def zoom_in_out(t):
 
 def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, size=20):
 # def get_text_clips_n_notification(textlist, clip_time=60, height=1280, wid=720, size=20):
-    colors = [ 'Green', 'NavyBlue', 'SkyBlue2', 'Purple',
-              'Black', 'HotPink4', 'Red', 'OrangeRed3', 'Brown']
+    colors = [ 'Green', 'Blue', 'SkyBlue2', 'Purple',
+              'Black', 'Pink', 'Red', 'Yellow', 'Brown']
     
     # colors =["red",'yellow', 'Green', 'Blue', "Orange", ]
 
@@ -56,7 +56,7 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
     ntext = len(textlist)
     interval = int(clip_time/ntext)
     for i, post in enumerate(textlist):
-        return_comment, nline = addcomment(post, size=50)
+        return_comment, nline = addcomment(post, size=60)
         color = random.choice(colors)
         fontsize=30
             # color="white"
@@ -64,9 +64,10 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
         txt = mpy.TextClip(return_comment, font="Keep-Calm-Medium",  # font='Courier',
                            fontsize=fontsize, bg_color=color, size=(wid+5, text_hight+10),
                            method="caption",
-                           stroke_width=2.0,
-                           stroke_color="white",
-                           kerning=2
+                           stroke_width=1.5,
+                           stroke_color="black",
+                           kerning=2,
+                           color='white'
                            )
         
         #txt = txt.on_color(size=(txt.w+10,txt.h-10),
