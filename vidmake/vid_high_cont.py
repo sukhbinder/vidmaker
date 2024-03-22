@@ -245,6 +245,8 @@ def create_parser2():
 
     parser.add_argument("-nc", "--no-of-clips",  type=int, help="New file after this many (default: %(default)s)", default=240)
 
+    parser.add_argument("-o", "--only-cut", help="Flag to only cut and not (default: %(default)s)", action="store_true")
+
     return parser
 
 
@@ -296,6 +298,11 @@ def con_main():
         beats_track = get_beatsmap_from_mp3(audfile)
         audioname = os.path.basename(audfile)[:10]
         audioname = audioname.replace(" ", "_")
+
+    if args.only_cut and not args.debug:
+        print("Only Cut can only be used with debug option")
+        return
+
     # ind = app._CHOICES.index(args.audio)
 
     # audfile = os.path.join(app._MUSICFOLDER, app._MUSIC[ind])
@@ -335,6 +342,10 @@ def con_main():
             alist.append(nout)
         else:
             alist=[0,nout]
+
+        if args.only_cut:
+            return
+        
         beg=0
         for istart in alist[1:]:
             prefix = "{0}_{1}".format(args.prefix, beg)
@@ -343,6 +354,7 @@ def con_main():
                                                                                        len(mov), args.howmany,
                                                                                        args.startat,
                                                                                        args.threshold)
+            
             outfullname = os.path.join(vdir, ifname)
             gc = vlib.generate_video_hl(vc, new_audioclip, outfullname, fps=args.fps, fadeout=args.fadeout, afadeout=args.afadeout)
             beg = istart
