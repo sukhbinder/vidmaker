@@ -248,7 +248,7 @@ def create_parser2():
     return parser
 
 
-def trim_and_get_outfiles_for_coninous(subclips, slow=0.7):
+def trim_and_get_outfiles_for_coninous(subclips, slow=0.1):
     inum=1
     outfiles=[]
     for item, val in subclips.items():
