@@ -254,11 +254,12 @@ def trim_and_get_outfiles_for_coninous(subclips, slow=0.1):
     inum=1
     outfiles=[]
     for item, val in subclips.items():
+        fname=os.path.splitext(os.path.basename(item))[0]
         if len(val) == 0:
             dur = app.get_length(item)
             st=0.0
             et = st+dur
-            outfile = "{}_output_s.mp4".format(inum)
+            outfile = "{0}_output_{1}_s.mp4".format(inum, fname)
             app.trim_by_ffmpeg(item, st, et,outfile, dur)
             if os.path.exists(outfile):
                 outfiles.append(outfile)
@@ -266,12 +267,12 @@ def trim_and_get_outfiles_for_coninous(subclips, slow=0.1):
         for st,et in val:
             dur=et-st
             if dur > 5.0:
-                outfile = "{}_output.mp4".format(inum)
+                outfile = "{0}_output_{1}.mp4".format(inum,fname)
             else:
                 if choices([0,1], weights=[1-slow, slow]):
-                    outfile = "{}_output_s.mp4".format(inum)
+                    outfile = "{0}_output_{1}_s.mp4".format(inum,fname)
                 else:
-                   outfile = "{}_output.mp4".format(inum) 
+                   outfile = "{0}_output_{1}.mp4".format(inum, fname) 
             app.trim_by_ffmpeg(item, st, et,outfile, dur)
             if os.path.exists(outfile):
                 outfiles.append(outfile)
