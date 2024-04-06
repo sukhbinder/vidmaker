@@ -7,6 +7,7 @@ import vidmake.app as app
 import subprocess
 import argparse
 import moviepy.video.fx.all as vfx
+from itertools import cycle
 
 
 
@@ -44,11 +45,14 @@ def zoom_in_out(t):
 
 def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, size=20):
 # def get_text_clips_n_notification(textlist, clip_time=60, height=1280, wid=720, size=20):
-    colors = [ 'Green', 'Blue', 'SkyBlue2', 'Purple',
-              'Black', 'Pink', 'Red', 'Yellow', 'Brown']
+    # colors = [ 'limegreen', 'skyblue','lightorange'
+    #           'lightpink', 'Yellow', 'White']
     
     # colors =["red",'yellow', 'Green', 'Blue', "Orange", ]
-
+    # colors from https://imagemagick.org/script/color.php
+    colors = ['plum1', 'LightSteelBlue1','LightSkyBlue', 'turquoise1', 'SpringGreen','LightGoldenrod1',
+              'DarkGoldenrod1','DarkOrange', 'OliveDrab1', 'yellow']
+    cols = cycle(colors)
     textlist.append("Visit @humhairahi channel for full Videos!")
 
     text_clips = []
@@ -57,7 +61,8 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
     interval = int(clip_time/ntext)
     for i, post in enumerate(textlist):
         return_comment, nline = addcomment(post, size=60)
-        color = random.choice(colors)
+        # color = random.choice(colors)
+        color = next(cols)
         fontsize=30
             # color="white"
         text_hight = 60 #max(200, nline*fontsize)
@@ -81,7 +86,7 @@ def get_text_clips_n_notification(textlist, clip_time=60, height=800, wid=688, s
         # animation
         txt = txt.resize(zoom_in_out)
         text_clips.append(txt)
-        print(i, 0+(i*interval))
+        print(color, i, 0+(i*interval))
 
         notification = mpy.AudioFileClip(notification_fname)
         notification = notification.set_start((0, 0 + (i * interval)))
