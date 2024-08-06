@@ -66,7 +66,7 @@ def make_video(files, fname):
     with open("mylist.txt", "w") as fout:
         for f in files:
             if os.path.exists(f):
-                fout.write("file {}\n".format(f))
+                fout.write("file '{}'\n".format(f))
     cmdline= "ffmpeg -f concat -safe 0 -i mylist.txt -c copy {0}".format( fname)
     print(cmdline)
     iret=os.system(cmdline)

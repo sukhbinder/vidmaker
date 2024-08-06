@@ -6,6 +6,7 @@ from concurrent.futures import ProcessPoolExecutor
 import subprocess
 import os
 import moviepy.editor as mpy
+import numpy as np
 
 import json
 
@@ -153,7 +154,7 @@ def section_main():
 
 
 
-def concat(inputfile:str, fname:str = None):
+def concat(inputfile:str, fname:str = None, section:bool = False, nsec:int = 500):
     inputfile = os.path.abspath(inputfile)
     folder = os.path.dirname(inputfile)
     with open(inputfile, "r") as fin:
@@ -161,13 +162,26 @@ def concat(inputfile:str, fname:str = None):
 
     if fname is None:
         fname= "combined_{0}.mp4".format(files[0]) 
+        fname= os.path.join(folder, fname)
     
-    fname= os.path.join(folder, fname)
-    print(files)
+    # print(files)
     files = [os.path.join(folder, f.strip()) for f in files]
-    
-    print(files)
-    iret= flib.make_video(files, fname )
+    if not section:
+        iret= flib.make_video(files, fname)
+    else:
+        # Sections video and breaks them if the creation time is greater than 500 sec nsec
+        dd = np.array([os.path.getctime(f) for f in files])
+        ddr = np.roll(dd,-1)
+        diff= ddr-dd
+        breaks = [i for i, d in enumerate(diff) if d > nsec]
+        beg =0
+        print(breaks)
+        fileprefix, ext  = os.path.splitext(fname)
+        for i, b in enumerate(breaks):
+            fname="{0}_{1}_{2}.mp4".format(fileprefix,i,beg)
+            iret= flib.make_video(files[beg:b+1], fname)
+            beg = b+1
+
     return fname
 
 
@@ -175,13 +189,15 @@ def create_parser_concat2():
     parser = argparse.ArgumentParser( description="Concat Videos using FFMPEG given a filename")
     parser.add_argument("inputfile", type=str, help="Inputfiles to concatenate")
     parser.add_argument("-o", "--outfilename", type=str, help="Folder where files are (default: %(default)s)", default=None )
+    parser.add_argument("-s", "--section", help="If given sections Video by `nsec` (default: %(default)s)", action="store_true")
+    parser.add_argument("-n", "--nsec", help="Section Video by `nsec` (default: %(default)s)", default=500)
     return parser
 
 
 def concat_main2():
     parser = create_parser_concat2()
     args = parser.parse_args()
-    fname= concat(args.inputfile, args.outfilename)
+    fname= concat(args.inputfile, args.outfilename, args.section, args.nsec)
     print("{} created".format(fname) )
 
 
