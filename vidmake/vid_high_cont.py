@@ -87,6 +87,8 @@ def trim_and_get_outfiles(sc):
     outfiles = []
     for i, clip in enumerate(sc):
         fn, st, et, speed = clip
+        # ROund to two decimal place.
+        st,et = np.round(st,2), np.round(et,2)
         fna = os.path.basename(fn)
         fna,ext = os.path.splitext(fna)
         dur = et-st
@@ -265,6 +267,8 @@ def trim_and_get_outfiles_for_coninous(subclips, slow=0.1):
                 outfiles.append(outfile)
                 inum = inum+1
         for st,et in val:
+            # round the time to 2 decimal place.
+            st, et = np.round(st,2), np.round(et,2)
             dur=et-st
             if dur > 5.0:
                 outfile = "{0}_output_{1}.mp4".format(inum,fname)
@@ -387,7 +391,7 @@ def get_beatsmap_from_mp3(file_path, beats=False):
         onset_times = librosa.frames_to_time(b_f)
         print(f"tempo : {tempo}")
     else:
-        onset_frames = librosa.onset.onset_detect(x, sr=sr, wait=5, pre_avg=1, post_avg=1, pre_max=1, post_max=1)
+        onset_frames = librosa.onset.onset_detect(y=x, sr=sr, wait=5, pre_avg=1, post_avg=1, pre_max=1, post_max=1)
         onset_times = librosa.frames_to_time(onset_frames)
     # remove extension, .mp3, .wav etc.
     file_name_no_extension, _ = os.path.splitext(file_path)

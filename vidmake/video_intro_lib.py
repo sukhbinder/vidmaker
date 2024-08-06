@@ -51,7 +51,7 @@ def beats_clip(audfile, offset=0.0):
 
 def beat_times(beats_track, threshold=0.2):
     times = np.genfromtxt(beats_track, delimiter="\t",
-                          usecols=0, dtype=np.float)
+                          usecols=0, dtype=np.float64)
     times.sort()
     print(np.diff(times, 1).min(), np.diff(
         times, 1).max(), np.diff(times, 1).mean())
@@ -214,6 +214,7 @@ def generate_video_hl(vc, new_audioclip, outfile, fps=30, fadeout=1, afadeout=2,
             clipduration).audio_fadeout(afadeout)
 
     clip_withsound = clip.set_audio(naudio)
+    print("fps is : ",fps)
     clip_withsound.write_videofile(
         outfile, temp_audiofile="out.m4a", audio_codec="aac", fps=fps)
     clip.close()
