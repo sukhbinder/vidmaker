@@ -118,7 +118,7 @@ def main():
     parser.add_argument("-t", "--text-file",  type=str, help="Text file containing comments (default: %(default)s)", default=None)
     parser.add_argument("-i", "--input",  type=str,nargs="*",action="append", help="Text inputs (default: %(default)s)", default=[])
     parser.add_argument("-d", "--time",  type=int, help="Duration of shorts in secs (default: %(default)s)", default=MAX_CLIP_TIME)
-    parser.add_argument("-st", "--startat",  type=float, help="Audio startat (default: %(default)s)", default=0.0)
+    parser.add_argument("-st", "--startat",  type=str, help="Audio startat (default: %(default)s)", default=0.0)
     parser.add_argument("-r", "--ratio",  type=float, help="Size Ratio: ex 9/16, 4/5 or (default: %(default)s)", default=1.0)
     
 
@@ -152,8 +152,10 @@ def main():
         files = [os.path.join(outdir,f) for f in files if f.endswith(".mp4") and "highlights" in f and f.startswith("IMG_")] 
         latest = max(files, key = os.path.getctime)
         fname = latest
+
+    start_time = mpy.cvsecs(args.startat)
     
-    cclip = create_shorts_from_vid(fname, startat=args.startat, crop_ratio=args.ratio)
+    cclip = create_shorts_from_vid(fname, startat=start_time crop_ratio=args.ratio)
     # if Duration is given as negative use the entire Duration of the clip
     if args.time < 0:
         clip_time = cclip.duration
