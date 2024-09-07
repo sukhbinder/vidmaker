@@ -118,7 +118,7 @@ def main():
     parser.add_argument("-t", "--text-file",  type=str, help="Text file containing comments (default: %(default)s)", default=None)
     parser.add_argument("-i", "--input",  type=str,nargs="*",action="append", help="Text inputs (default: %(default)s)", default=[])
     parser.add_argument("-d", "--time",  type=int, help="Duration of shorts in secs (default: %(default)s)", default=MAX_CLIP_TIME)
-    parser.add_argument("-st", "--startat",  type=str, help="Audio startat (default: %(default)s)", default=0.0)
+    parser.add_argument("-st", "--startat",  type=str, help="Audio startat ex 30s or 1:15 or 1:24:30 (default: %(default)s)", default=0.0)
     parser.add_argument("-r", "--ratio",  type=float, help="Size Ratio: ex 9/16, 4/5 or (default: %(default)s)", default=1.0)
     
 
