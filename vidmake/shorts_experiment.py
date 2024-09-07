@@ -155,7 +155,7 @@ def main():
 
     start_time = mpy.cvsecs(args.startat)
     
-    cclip = create_shorts_from_vid(fname, startat=start_time crop_ratio=args.ratio)
+    cclip = create_shorts_from_vid(fname, startat=start_time, crop_ratio=args.ratio)
     # if Duration is given as negative use the entire Duration of the clip
     if args.time < 0:
         clip_time = cclip.duration
