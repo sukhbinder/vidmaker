@@ -175,11 +175,13 @@ def concat(inputfile:str, fname:str = None, section:bool = False, nsec:int = 500
         diff= ddr-dd
         breaks = [i for i, d in enumerate(diff) if d > nsec]
         beg =0
+        breaks.append(len(dd))
         print(breaks)
         fileprefix, ext  = os.path.splitext(fname)
         for i, b in enumerate(breaks):
-            fname="{0}_{1}_{2}.mp4".format(fileprefix,i,beg)
+            fname="{0}_{1}_{2}.mp4".format(i,fileprefix,beg)
             iret= flib.make_video(files[beg:b+1], fname)
+            print("Return code is ",iret)
             beg = b+1
 
     return fname

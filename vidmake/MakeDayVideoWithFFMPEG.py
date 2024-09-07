@@ -63,14 +63,17 @@ def get_travel_video_by_day_breaks(day, folder=r"/Users/sukhbindersingh/Desktop/
 
 
 def make_video(files, fname):
-    with open("mylist.txt", "w") as fout:
+    base_name=os.path.basename(fname)
+    bname, ext = os.path.splitext(base_name)
+    out_file="{}_mylist.txt".format(bname)
+    with open(out_file, "w") as fout:
         for f in files:
             if os.path.exists(f):
                 fout.write("file '{}'\n".format(f))
-    cmdline= "ffmpeg -f concat -safe 0 -i mylist.txt -c copy {0}".format( fname)
+    cmdline= "ffmpeg -f concat -safe 0 -i {0} -c copy {1}".format(out_file, fname)
     print(cmdline)
-    iret=os.system(cmdline)
-    print(iret)
+    iret= os.system(cmdline)
+    print(cmdline)
     return iret
 
 
